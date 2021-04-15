@@ -1,8 +1,12 @@
 import tkinter as tk
+
+import PIL
 from PIL import ImageTk, Image
+from PIL.ImageTk import PhotoImage
+
 from GameRepeatClass import GameRepeatClass
 
-image = []
+imageArr = []
 
 def delButton():
     global buttonRepeatGame
@@ -12,9 +16,21 @@ def delButton():
     global buttonQuit
     buttonQuit.destroy()
 
+def loadImage():
+    global imageArr
+    for num in range(32):
+        pi = Image.open(str("resource/" + str(num + 1) + ".jpg"))
+        pi = pi.resize((50, 50), PIL.Image.ANTIALIAS)
+        pi = PhotoImage(pi)
+        imageArr.append(pi)
 
 def StartGameRepeat():
-    game = GameRepeatClass(image ,bg='#DEB887', highlightbackground="#8B4513")
+    loadImage()
+    global imageArr
+    pi = Image.open("resource/field.jpg")
+    pi = pi.resize((50, 50), PIL.Image.ANTIALIAS)
+    pi = PhotoImage(pi)
+    game = GameRepeatClass(imageArr, pi, bg='#FF00FF', highlightbackground="#8B4513")
     game.place(x=100, y=100, width=400, height=400)
     delButton()
 

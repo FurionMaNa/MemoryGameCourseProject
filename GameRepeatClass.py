@@ -1,48 +1,70 @@
+import time
 import tkinter as tk
 from random import randint
+
+from TileClass import TileClass
 
 
 class GameRepeatClass(tk.Canvas):
 
-    map = []
-    size = 50
+    __map = []
+    __size = 50
+    __count = 0
+    __buf = None
 
-    def __init__(self, image, master=None, cnf={}, **kw):
+    def __init__(self, image, bgImage, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
         self.bind("<Button-1>", self.leftClick)
-        self.image = image
         for row in range(8):
-            self.map.append([])
+            self.__map.append([])
             for col in range(8):
-                self.map[row].append(-1)
+                self.__map[row].append(TileClass(-1, image, bgImage, self.__size * col, self.__size * row, self.__size, self))
         for row in range(8):
             for col in range(8):
                 buf = randint(0, 32)
                 while not self.findRepeat(buf):
                     buf = randint(0, 32)
-                self.map[row][col] = buf
+                self.__map[row][col] = TileClass(buf, image, bgImage, self.__size * col+25, self.__size * row+25, self.__size, self)
+
         self.draw()
 
     def leftClick(self, event):
-        col = event.x // self.size
-        row = event.y // self.size
-        print(self.map[row][col])
+        col = event.x // self.__size
+        row = event.y // self.__size
+        self.__map[row][col].click()
+        print(self.__map[row][col].number)
+        self.draw()
+        self.update()
+        self.__count += 1
+        if self.__count == 1:
+            self.__buf = self.__map[row][col]
+        elif self.__buf.number == self.__map[row][col].number:
+            time.sleep(0.5)
+            self.__buf.number = -1
+            self.__map[row][col].number = -1
+        else:
+            time.sleep(0.5)
+            self.__buf.status = False
+            self.__map[row][col].status = False
+            self.__count = 0
+        self.draw()
 
     def draw(self):
+        self.delete("all")
         for i in range(8):
             for j in range(8):
-                self.create_rectangle(self.size * j, self.size * i, self.size * (j + 1), self.size * (i + 1))
-                self.create_text(self.size * j + 10, self.size * i + 10, text=self.map[i][j])
+                self.create_rectangle(self.__size * j, self.__size * i, self.__size * (j + 1), self.__size * (i + 1))
+                self.__map[i][j].draw()
 
     def findRepeat(self, b):
         count = 0
         for i in range(8):
             for j in range(8):
-                if int(b) == int(self.map[i][j]):
+                if b == self.__map[i][j].number:
                     count += 1
                 if count > 1:
                     return False
-                if int(self.map[i][j]) == -1:
+                if int(self.__map[i][j].number) == -1:
                     return True
         return True
 
