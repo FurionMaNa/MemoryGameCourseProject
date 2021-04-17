@@ -1,10 +1,12 @@
 import tkinter as tk
+from tkinter import messagebox
 
 import PIL
 from PIL import ImageTk, Image
 from PIL.ImageTk import PhotoImage
 
 from GameRepeatClass import GameRepeatClass
+from GameSearchClass import GameSearchClass
 
 imageArr = []
 
@@ -25,8 +27,17 @@ def loadImage():
         imageArr.append(pi)
 
 def StartGameRepeat():
+    loadImage()
+    global imageArr
+    pi = Image.open("resource/field.jpg")
+    pi = pi.resize((50, 50), PIL.Image.ANTIALIAS)
+    pi = PhotoImage(pi)
+    game = GameRepeatClass(imageArr, pi, onWin, bg='#f7d58c', highlightbackground="#32160a")
+    game.place(x=150, y=150, width=300, height=300)
     delButton()
 
+def onWin(self):
+    messagebox.showinfo(title="Победа", message="Поздравляем! Вы победили")
 
 def StartGameSearch():
     loadImage()
@@ -34,7 +45,7 @@ def StartGameSearch():
     pi = Image.open("resource/field.jpg")
     pi = pi.resize((50, 50), PIL.Image.ANTIALIAS)
     pi = PhotoImage(pi)
-    game = GameRepeatClass(imageArr, pi, bg='#FF00FF', highlightbackground="#8B4513")
+    game = GameSearchClass(imageArr, pi, onWin, bg='#FFD700', highlightbackground="#32160a")
     game.place(x=100, y=100, width=400, height=400)
     delButton()
 
