@@ -43,7 +43,7 @@ def aboutAuthor():
 
 def onWin(self, score):
     f = open('resource/score.json', 'w')
-    f.write('{"score" : ' + score + ' }')
+    f.write('{"score" : ' + str(score) + ' }')
     f.close()
     messagebox.showinfo(title="Победа", message="Поздравляем! Вы победили")
 
@@ -56,7 +56,6 @@ def StartGameSearch():
     game = GameSearchClass(imageArr, pi, onWin, bg='#FFD700', highlightbackground="#32160a")
     game.place(x=100, y=100, width=400, height=400)
     delButton()
-
 
 size = 600
 root = tk.Tk()
@@ -72,7 +71,7 @@ except:
     score = 0
 panel = tk.Label(root, image=image)
 panel.pack(side="top", fill="both", expand="no")
-l1 = tk.Label(root, text="Score: " + str(score))
+l1 = tk.Label(root, text="Last Score: " + str(score['score']))
 l1.place(x=500, y=20)
 buttonRepeatGame = tk.Button(root, text='Start Game Search', command=StartGameSearch, bg='#DEB887')
 buttonRepeatGame.place(x=200, y=200, width=200)

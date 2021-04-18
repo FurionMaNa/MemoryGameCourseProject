@@ -63,6 +63,7 @@ class GameSearchClass(tk.Canvas):
             for j in range(8):
                 self.create_rectangle(self.__size * j, self.__size * i, self.__size * (j + 1), self.__size * (i + 1))
                 self.__map[i][j].draw()
+                self.create_text(self.__size * j + 10, self.__size * i + 10, text=self.__map[i][j].number)
 
     def __findRepeat(self, b):
         count = 0
