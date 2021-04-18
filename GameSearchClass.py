@@ -11,6 +11,7 @@ class GameSearchClass(tk.Canvas):
     __size = 50
     __count = 0
     __buf = None
+    __click = 0
 
     def __init__(self, image, bgImage, onWin, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
@@ -30,6 +31,7 @@ class GameSearchClass(tk.Canvas):
         self.draw()
 
     def leftClick(self, event):
+        self.__click += 1
         col = event.x // self.__size
         row = event.y // self.__size
         if not self.__map[row][col].status:
@@ -52,7 +54,8 @@ class GameSearchClass(tk.Canvas):
                 self.__count = 0
             self.draw()
         if self.__win():
-            self.__onWin(self)
+            self.__onWin(self, self.__click)
+
 
     def draw(self):
         self.delete("all")
